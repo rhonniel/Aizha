@@ -7,14 +7,17 @@ public class Ball : MonoBehaviour
     [SerializeField] Paddle paddle;
     [SerializeField] float startForceX;
     [SerializeField] float startForceY;
+    [SerializeField] AudioClip[] audioClips;
+
 
     Vector2 paddleToBallVector;
     bool hasStarted;
-
+    AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
         paddleToBallVector = transform.position - paddle.transform.position;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -51,6 +54,15 @@ public class Ball : MonoBehaviour
              al utilizar un cuerpo rigido el objeto funcionara bajo las leyes de la fisica, 
             este vector de velocidad es la fuerza que lo impulsa a esa direccion dada*/
             GetComponent<Rigidbody2D>().velocity = new Vector2(startForceX, startForceY);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (hasStarted)
+        {
+         
+            audioSource.PlayOneShot(audioClips[Random.Range(0, audioClips.Length)]);
         }
     }
 
